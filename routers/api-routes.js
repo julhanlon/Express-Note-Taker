@@ -3,9 +3,10 @@ const router = express.Router();
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
-const { v4: uuidv4 } = require('uuid');
-var id = uuidv4();
+// const { v4: uuidv4 } = require('uuid');
+// var id = uuidv4();
 
+console.log(id);
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -15,17 +16,24 @@ router.get("/api/notes", (req, res) => {
 });
 
 router.post("/api/notes", (req, res) => {
-let id = await readFileAsync("data.json");
-id = JSON.parse(id);
-countData.count++;
+req.body = {
+  title: "",
+  text: "",
+}
+var id = uuid.v4();
+req.body.id =" " ;
 
-await writeFileAsync("data.json", JSON.stringify(id, null, 2));
+writeFileAsync("data.json", JSON.stringify(id, null, 2));
 res.send(id);
 });
 
 router.delete("/api/notes/:id", (req, res) => {
-  console.log("api has been hit");
-  res.json({ message: "this is a third example" });
+  var id = req.params.id;
+  var arr = JSON.parse(await readFileAsync("./db/todos.json", "utf8"));
+
+arr = arr.filter(item => item !== id)
+
+console.log(arr)
 });
 
 
