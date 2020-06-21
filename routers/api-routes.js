@@ -11,8 +11,8 @@ const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
 router.get("/api/notes", (req, res) => {
-  console.log("api has been hit");
-  res.json({ message: "hello from the api" });
+ var data = JSON.parse(readFileAsync(".db/db.json", "utf8"));
+ res.json(data);
 });
 
 router.post("/api/notes", (req, res) => {
@@ -29,12 +29,15 @@ res.send(id);
 
 router.delete("/api/notes/:id", (req, res) => {
   var id = req.params.id;
-  var arr = JSON.parse(await readFileAsync("./db/todos.json", "utf8"));
+  var arr = JSON.parse(await readFileAsync("./db/db.json", "utf8"));
 
 arr = arr.filter(item => item !== id)
 
 console.log(arr)
-});
+
+}).then(() => {
+  writeFileAsync("./db/db.json", JSON.stringify(arr, null, 2));
+})
 
 
 module.exports = router;
