@@ -3,10 +3,9 @@ const router = express.Router();
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
-// const { v4: uuidv4 } = require('uuid');
-// var id = uuidv4();
+const { v4: uuidv4 } = require('uuid');
+var id = uuidv4();
 
-console.log(id);
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -20,18 +19,18 @@ req.body = {
   title: "",
   text: "",
 }
-var id = uuid.v4();
-req.body.id =" " ;
+var todoId = uuid.v4();
+req.body.todoTd =" " ;
 
 writeFileAsync("data.json", JSON.stringify(id, null, 2));
 res.send(id);
 });
 
 router.delete("/api/notes/:id", (req, res) => {
-  var id = req.params.id;
-  var arr = JSON.parse(await readFileAsync("./db/db.json", "utf8"));
+  var todoId = req.params.id;
+  var arr = JSON.parse(readFileAsync("./db/db.json", "utf8"));
 
-arr = arr.filter(item => item !== id)
+arr = arr.filter(item => item !== todoId)
 
 console.log(arr)
 
