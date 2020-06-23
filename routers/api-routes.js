@@ -14,17 +14,27 @@ router.get("/api/notes", (req, res) => {
  res.json(data);
 });
 
+
+
+
 router.post("/api/notes", (req, res) => {
+  const data = JSON.parse(readFileAsync("./db/todos.json", "utf8"));
+  const todo = req.body;
 req.body = {
   title: "",
   text: "",
 }
-var todoId = uuid.v4();
-req.body.todoTd =" " ;
+var id = uuid.v4();
+req.body.id = id ;
+data.push(todo);
 
-writeFileAsync("data.json", JSON.stringify(id, null, 2));
-res.send(id);
+}).then((res) => {
+  writeFileAsync("data.json", JSON.stringify(data, null, 2));
+  res.send(data);
 });
+
+
+
 
 router.delete("/api/notes/:id", (req, res) => {
   var todoId = req.params.id;
@@ -36,7 +46,9 @@ console.log(arr)
 
 }).then(() => {
   writeFileAsync("./db/db.json", JSON.stringify(arr, null, 2));
-})
+});
+
+
 
 
 module.exports = router;
