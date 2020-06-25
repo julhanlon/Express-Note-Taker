@@ -17,35 +17,30 @@ router.get("/api/notes", (req, res) => {
 
 
 
-router.post("/api/notes", (req, res) => {
-  const data = JSON.parse(readFileAsync("./db/todos.json", "utf8"));
+router.post("/api/notes", async (req, res) => {
+  const data = JSON.parse( await readFileAsync("./db/todos.json", "utf8"));
   const todo = req.body;
-req.body = {
-  title: "",
-  text: "",
-};
 var id = uuid.v4();
 req.body.id = id ;
 data.push(todo);
 
-}).then((res) => {
-  writeFileAsync("data.json", JSON.stringify(data, null, 2));
-  res.send(data);
+
+await writeFileAsync("db.json", JSON.stringify(data, null, 2));
+  response.json(data);
 });
 
 
 
 
-router.delete("/api/notes/:id", (req, res) => {
+router.delete("/api/notes/:id", async (req, res) => {
   var todoId = req.params.id;
-  var arr = JSON.parse(readFileAsync("./db/db.json", "utf8"));
+  var arr = JSON.parse( await readFileAsync("./db/db.json", "utf8"));
 
 arr = arr.filter(item => item !== todoId)
 
 console.log(arr)
 
-}).then(() => {
-  writeFileAsync("./db/db.json", JSON.stringify(arr, null, 2));
+ await writeFileAsync("./db/db.json", JSON.stringify(arr, null, 2));
 });
 
 
