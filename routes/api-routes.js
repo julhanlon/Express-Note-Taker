@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
 const fs = require("fs");
 const util = require("util");
 const { v4: uuidv4 } = require('uuid');
@@ -10,23 +9,23 @@ const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
 router.get("/api/notes", (req, res) => {
- var data = JSON.parse(readFileAsync(".db/db.json", "utf8"));
- res.json(data);
+  let data = fs.readFileSync("./db/db.json", "utf8");
+  data = JSON.parse(data);
+  res.json(data);
 });
 
 
 
 
 router.post("/api/notes", async (req, res) => {
-  const data = JSON.parse( await readFileAsync("./db/todos.json", "utf8"));
+  const data = JSON.parse( await readFileAsync("./db/db.json", "utf8"));
   const todo = req.body;
-var id = uuid.v4();
-req.body.id = id ;
-data.push(todo);
+  todo.id = data.length + 1;
+  data.push(todo);
 
 
 await writeFileAsync("db.json", JSON.stringify(data, null, 2));
-  response.json(data);
+  res.json(data);
 });
 
 
@@ -41,6 +40,7 @@ arr = arr.filter(item => item !== todoId)
 console.log(arr)
 
  await writeFileAsync("./db/db.json", JSON.stringify(arr, null, 2));
+ res.json({message:"deleted todo"});
 });
 
 
