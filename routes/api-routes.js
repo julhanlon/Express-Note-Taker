@@ -13,29 +13,29 @@ router.get("/api/notes", (req, res) => {
 });
 
 
+router.post("/api/notes", (req, res) => {
+  var data = fs.readFileSync("./db/db.json", "utf8");
+    newNote = JSON.parse(data);
+    const { title, text } = req.body;
+    var id = newNote.length + 1;
+    newNote.push({ title, text, id });
 
 
-router.post("/api/notes", async (req, res) => {
-  const data = JSON.parse( await readFileAsync("./db/db.json", "utf8"));
-  const todo = req.body;
-  todo.id = data.length + 1;
-  data.push(todo);
-
-
-await writeFileAsync("db.json", JSON.stringify(data, null, 2));
-  res.json(data);
+    fs.writeFileSync("./db/db.json", JSON.stringify(newNote, null, 2));
+    res.send({ msg: "new note added" });
 });
 
 
 
 
 router.delete("/api/notes/:id", async (req, res) => {
-  var todoId = req.params.id;
+  var noteId = req.params.id;
   var arr = JSON.parse( await readFileAsync("./db/db.json", "utf8"));
-
-arr = arr.filter(item => item !== todoId)
-
-console.log(arr)
+  arr.map((value, index) => {
+    if (value.id == noteId) {
+      arr.splice(index, 1);
+    }
+  });
 
  await writeFileAsync("./db/db.json", JSON.stringify(arr, null, 2));
  res.json({message:"deleted todo"});
