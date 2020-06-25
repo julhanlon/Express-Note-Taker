@@ -9,11 +9,11 @@ app.use(express.static("./public/"));
 
 //Sets up client side routes responsible for serving html
 const clientRoutes = require("./routes/client-routes");
-app.use("/", clientRoutes);
+app.use(clientRoutes);
 
 //Sets up api routers for sending data to the client
 const apiRoutes = require("./routes/api-routes");
-app.use("/", apiRoutes);
+app.use(apiRoutes);
 
 // const dataRoutes = require("./routes/data-routes");
 // app.use(dataRoutes);
